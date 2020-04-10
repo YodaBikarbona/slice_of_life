@@ -24,7 +24,7 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', TemplateView.as_view(template_name='angular_home.html')),
+    path('', TemplateView.as_view(template_name='angular_home.html')),
     path('v1/login', views.login),
     path('v1/gallery', views.get_gallery),
     path('v1/gallery/<str:id>', views.get_image),
