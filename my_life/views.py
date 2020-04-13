@@ -179,11 +179,13 @@ def get_post(request, id):
     post = Post.get_post_by_unique_id(id=id)
     if not post:
         return error_handler(error_status=404, message=f'Not found')
+    post.increase_views()
     comments = PostComment.get_comments_by_post_id(post_id=post.id)
     post = PostSerializer(many=False, instance=post).data
     date = post['created'].split('T')[0].split('-')
     date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
     post['created'] = date.strftime("%b %d %Y")
+    post['views'] += 1
     comments = PostCommentSerializer(many=True, instance=comments).data
     post['comments'] = comments
     return HttpResponse(

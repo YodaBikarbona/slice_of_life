@@ -263,6 +263,10 @@ class Post(models.Model):
         posts_number = Post.objects.filter().count()
         return posts_number
 
+    def increase_views(self):
+        self.views += 1
+        self.save()
+
 
 class ImageComment(models.Model):
     created = models.DateTimeField(default=django.utils.timezone.now)
