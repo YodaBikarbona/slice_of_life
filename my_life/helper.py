@@ -48,3 +48,27 @@ def check_valid_limit_and_offset(limit, offset):
         except ValueError as ex:
             print(ex)
     return int(limit), int(offset)
+
+
+def tag_grouping(content, post=False):
+    tags = ['<p>', '<br>', '<img>', '<video>', '<link>']
+    temp_post = content
+    temp_post = temp_post.split('<')
+    temp_post = [p for p in temp_post if p != '']
+    res = []
+    for i in temp_post:
+        if post:
+            if i[0] == 'p':
+                res.append({'tag': 'p', 'content': i[len(tags[0]) - 1:]})
+            elif i[0] == 'b':
+                res.append({'tag': 'b', 'content': i[len(tags[1]) - 1:]})
+            elif i[0] == 'i':
+                res.append({'tag': 'i', 'content': i[len(tags[2]) - 1:]})
+            elif i[0] == 'v':
+                res.append({'tag': 'v', 'content': i[len(tags[3]) - 1:]})
+            elif i[0] == 'l':
+                res.append({'tag': 'l', 'content': i[len(tags[4]) - 1:]})
+        else:
+            if i[0] == 'p':
+                res.append({'tag': 'p', 'content': i[len(tags[0]) - 1:]})
+    return res

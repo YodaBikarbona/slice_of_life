@@ -24,7 +24,8 @@ from .validators import (
 from .helper import (
     error_handler,
     new_psw,
-    check_valid_limit_and_offset
+    check_valid_limit_and_offset,
+    tag_grouping
 )
 from .serializers import (
     UserSerializer,
@@ -120,6 +121,8 @@ def get_home_posts(request):
     for post in posts:
         post['content'] = post['content'].replace('\r', '')
         post['content'] = post['content'][:1555] + '...'
+        res = tag_grouping(post['content'], True)
+        post['content'] = res
         date = post['created'].split('T')[0].split('-')
         date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
         post['created'] = date.strftime("%b %d %Y")
@@ -150,6 +153,8 @@ def get_posts(request):
     for post in posts:
         post['content'] = post['content'].replace('\r', '')
         post['content'] = post['content'][:1555] + '...'
+        res = tag_grouping(post['content'], True)
+        post['content'] = res
         date = post['created'].split('T')[0].split('-')
         date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
         post['created'] = date.strftime("%b %d %Y")
@@ -186,6 +191,8 @@ def get_post(request, id):
     date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
     post['created'] = date.strftime("%b %d %Y")
     post['views'] += 1
+    res = tag_grouping(post['content'], True)
+    post['content'] = res
     comments = PostCommentSerializer(many=True, instance=comments).data
     post['comments'] = comments
     return HttpResponse(
