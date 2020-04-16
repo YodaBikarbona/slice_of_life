@@ -190,7 +190,6 @@ def get_post(request, id):
     date = post['created'].split('T')[0].split('-')
     date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
     post['created'] = date.strftime("%b %d %Y")
-    post['views'] += 1
     res = tag_grouping(post['content'], True)
     post['content'] = res
     comments = PostCommentSerializer(many=True, instance=comments).data
