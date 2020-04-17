@@ -188,8 +188,8 @@ class Image(models.Model):
         #     self.file_name = f'{uuid.uuid4()}.{self.type}'
         #     self.image.name = self.file_name
         # self.path = f'media/{self.file_name}'
-        # if not self.uniqueId:
-        #     self.uniqueId = uuid.uuid4().int
+        if not self.uniqueId:
+            self.uniqueId = uuid.uuid4().int
         super(Image, self).save(*args, **kwargs)
 
     @staticmethod
