@@ -34,6 +34,8 @@ urlpatterns = [
     path('v1/login', views.login),
     path('v1/gallery', views.get_gallery),
     path('v1/gallery/<str:id>', views.get_image),
+    path('v1/gallery/<str:id>/next', views.get_next_image),
+    path('v1/gallery/<str:id>/previous', views.get_previous_image),
     path('v1/home', views.get_home_posts),
     path('v1/posts/<str:id>', views.get_post),
     path('v1/posts', views.get_posts)

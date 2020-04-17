@@ -200,6 +200,38 @@ class Image(models.Model):
     def get_image_by_unique_id(id):
         return Image.objects.filter(uniqueId=id, postImage=False).first()
 
+    @staticmethod
+    def get_next_image(image_id):
+        images = Image.objects.filter().order_by('id').all()
+        ids = []
+        current_index = -1
+        index = -1
+        if images:
+            ids = [image.id for image in images]
+            current_index = ids.index(image_id)
+            index = current_index - 1 if current_index > 0 else -1
+            if index == -1:
+                return False
+        return Image.objects.filter(id=ids[index], postImage=False).first()
+
+    @staticmethod
+    def get_previous_image(image_id):
+        images = Image.objects.filter().order_by('id').all()
+        ids = []
+        current_index = -1
+        index = -1
+        if images:
+            ids = [image.id for image in images]
+            current_index = ids.index(image_id)
+            index = current_index + 1 if current_index < len(ids) - 1 else -1
+            if index == -1:
+                return False
+        return Image.objects.filter(id=ids[index], postImage=False).first()
+
+    def increase_views(self):
+        self.views += 1
+        self.save()
+
 
 class Post(models.Model):
     created = models.DateTimeField(default=django.utils.timezone.now)

@@ -95,6 +95,7 @@ def get_image(request, id):
     image = Image.get_image_by_unique_id(id=id)
     if not image:
         return error_handler(error_status=404, message=f'Not found!')
+    image.increase_views()
     comments = ImageComment.get_comments_by_image_id(image_id=image.id)
     image = ImageSerializer(many=False, instance=image).data
     comments = ImageCommentSerializer(many=True, instance=comments).data
@@ -107,6 +108,72 @@ def get_image(request, id):
                 'server_time': django.utils.timezone.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 'message': f'Image',
                 'result': image
+            }
+        ),
+        content_type='application/json',
+        status=200
+    )
+
+
+@api_view(['GET'])
+def get_next_image(request, id):
+    try:
+        int(id)
+    except ValueError as ex:
+        print(ex)
+        return error_handler(error_status=400, message='Bad data!')
+    image = Image.get_image_by_unique_id(id=id)
+    if not image:
+        return error_handler(error_status=404, message=f'Not found!')
+    next_image = Image.get_next_image(image_id=image.id)
+    if not next_image:
+        return error_handler(error_status=404, message=f'Not found!')
+    next_image.increase_views()
+    comments = ImageComment.get_comments_by_image_id(image_id=next_image.id)
+    next_image = ImageSerializer(many=False, instance=next_image).data
+    comments = ImageCommentSerializer(many=True, instance=comments).data
+    next_image['comments'] = comments
+    return HttpResponse(
+        json.dumps(
+            {
+                'status': f'OK',
+                'code': 200,
+                'server_time': django.utils.timezone.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                'message': f'Image',
+                'result': next_image
+            }
+        ),
+        content_type='application/json',
+        status=200
+    )
+
+
+@api_view(['GET'])
+def get_previous_image(request, id):
+    try:
+        int(id)
+    except ValueError as ex:
+        print(ex)
+        return error_handler(error_status=400, message='Bad data!')
+    image = Image.get_image_by_unique_id(id=id)
+    if not image:
+        return error_handler(error_status=404, message=f'Not found!')
+    next_image = Image.get_previous_image(image_id=image.id)
+    if not next_image:
+        return error_handler(error_status=404, message=f'Not found!')
+    next_image.increase_views()
+    comments = ImageComment.get_comments_by_image_id(image_id=next_image.id)
+    next_image = ImageSerializer(many=False, instance=next_image).data
+    comments = ImageCommentSerializer(many=True, instance=comments).data
+    next_image['comments'] = comments
+    return HttpResponse(
+        json.dumps(
+            {
+                'status': f'OK',
+                'code': 200,
+                'server_time': django.utils.timezone.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                'message': f'Image',
+                'result': next_image
             }
         ),
         content_type='application/json',
