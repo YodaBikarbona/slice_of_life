@@ -202,7 +202,7 @@ class Image(models.Model):
 
     @staticmethod
     def get_next_image(image_id):
-        images = Image.objects.filter().order_by('id').all()
+        images = Image.objects.filter(postImage=False).order_by('id').all()
         ids = []
         current_index = -1
         index = -1
@@ -216,7 +216,7 @@ class Image(models.Model):
 
     @staticmethod
     def get_previous_image(image_id):
-        images = Image.objects.filter().order_by('id').all()
+        images = Image.objects.filter(postImage=False).order_by('id').all()
         ids = []
         current_index = -1
         index = -1
