@@ -51,7 +51,7 @@ def check_valid_limit_and_offset(limit, offset):
 
 
 def tag_grouping(content, post=False):
-    tags = ['<p>', '<br>', '<img>', '<video>', '<link>']
+    tags = ['<p>', '<br>', '<img>', '<video>', '<link>', '<yt>']
     temp_post = content
     temp_post = temp_post.split('<')
     temp_post = [p for p in temp_post if p != '']
@@ -68,6 +68,8 @@ def tag_grouping(content, post=False):
                 res.append({'tag': 'v', 'content': i[len(tags[3]) - 1:]})
             elif i[0] == 'l':
                 res.append({'tag': 'l', 'content': i[len(tags[4]) - 1:]})
+            elif i[0] == 'y':
+                res.append({'tag': 'y', 'content': i[len(tags[5]) - 1:]})
         else:
             if i[0] == 'p':
                 res.append({'tag': 'p', 'content': i[len(tags[0]) - 1:]})

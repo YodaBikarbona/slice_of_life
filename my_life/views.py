@@ -261,6 +261,8 @@ def get_post(request, id):
     post['content'] = res
     comments = PostCommentSerializer(many=True, instance=comments).data
     post['comments'] = comments
+    for i in post['content']:
+        print(i)
     return HttpResponse(
         json.dumps(
             {
