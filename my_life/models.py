@@ -142,6 +142,9 @@ class Album(models.Model):
         unique=True
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Image(models.Model):
     created = models.DateTimeField(default=django.utils.timezone.now)
