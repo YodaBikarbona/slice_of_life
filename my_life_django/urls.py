@@ -31,12 +31,14 @@ urlpatterns = [
     path('login', TemplateView.as_view(template_name='angular_home.html')),
     path('posts/<str:id>', TemplateView.as_view(template_name='angular_home.html')),
     path('gallery/<str:id>', TemplateView.as_view(template_name='angular_home.html')),
+    path('gallery/album/<int:albumId>/<str:id>', TemplateView.as_view(template_name='angular_home.html')),
     path('v1/login', views.login),
-    path('v1/gallery', views.get_gallery),
-    path('v1/gallery/<str:id>', views.get_image),
-    path('v1/gallery/<str:id>/next', views.get_next_image),
-    path('v1/gallery/<str:id>/previous', views.get_previous_image),
+    path('v1/gallery/album/<int:album_id>', views.get_gallery),
+    path('v1/gallery/album/<int:album_id>/<str:id>', views.get_image),
+    path('v1/gallery/album/<int:album_id>/<str:id>/next', views.get_next_image),
+    path('v1/gallery/album/<int:album_id>/<str:id>/previous', views.get_previous_image),
     path('v1/home', views.get_home_posts),
     path('v1/posts/<str:id>', views.get_post),
-    path('v1/posts', views.get_posts)
+    path('v1/posts', views.get_posts),
+    path('v1/albums', views.get_albums)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,7 +16,8 @@ from .models import (
     Image,
     Post,
     ImageComment,
-    PostComment
+    PostComment,
+    Album
 )
 from .validators import (
     Validation
@@ -32,7 +33,8 @@ from .serializers import (
     ImageSerializer,
     PostSerializer,
     ImageCommentSerializer,
-    PostCommentSerializer
+    PostCommentSerializer,
+    AlbumSerializer
 )
 
 
@@ -67,8 +69,8 @@ def login(request):
 
 
 @api_view(['GET'])
-def get_gallery(request):
-    images = Image.get_all_photo_gallery()
+def get_gallery(request, album_id):
+    images = Image.get_all_photo_gallery(album_id=album_id)
     images = ImageSerializer(many=True, instance=images).data
     return HttpResponse(
         json.dumps(
@@ -86,7 +88,7 @@ def get_gallery(request):
 
 
 @api_view(['GET'])
-def get_image(request, id):
+def get_image(request, album_id, id):
     try:
         int(id)
     except ValueError as ex:
@@ -116,7 +118,7 @@ def get_image(request, id):
 
 
 @api_view(['GET'])
-def get_next_image(request, id):
+def get_next_image(request, album_id, id):
     try:
         int(id)
     except ValueError as ex:
@@ -125,7 +127,7 @@ def get_next_image(request, id):
     image = Image.get_image_by_unique_id(id=id)
     if not image:
         return error_handler(error_status=404, message=f'Not found!')
-    next_image = Image.get_next_image(image_id=image.id)
+    next_image = Image.get_next_image(image_id=image.id, album_id=album_id)
     if not next_image:
         return error_handler(error_status=404, message=f'Not found!')
     next_image.increase_views()
@@ -149,7 +151,7 @@ def get_next_image(request, id):
 
 
 @api_view(['GET'])
-def get_previous_image(request, id):
+def get_previous_image(request, album_id, id):
     try:
         int(id)
     except ValueError as ex:
@@ -158,7 +160,7 @@ def get_previous_image(request, id):
     image = Image.get_image_by_unique_id(id=id)
     if not image:
         return error_handler(error_status=404, message=f'Not found!')
-    next_image = Image.get_previous_image(image_id=image.id)
+    next_image = Image.get_previous_image(image_id=image.id, album_id=album_id)
     if not next_image:
         return error_handler(error_status=404, message=f'Not found!')
     next_image.increase_views()
@@ -234,6 +236,25 @@ def get_posts(request):
                 'server_time': django.utils.timezone.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 'message': f'Posts',
                 'results': posts
+            }
+        ),
+        content_type='application/json',
+        status=200
+    )
+
+
+@api_view(['GET'])
+def get_albums(request):
+    albums = Album.get_all_albums()
+    albums = AlbumSerializer(many=True, instance=albums).data
+    return HttpResponse(
+        json.dumps(
+            {
+                'status': f'OK',
+                'code': 200,
+                'server_time': django.utils.timezone.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                'message': f'Albums',
+                'results': albums
             }
         ),
         content_type='application/json',

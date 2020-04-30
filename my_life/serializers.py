@@ -5,7 +5,8 @@ from .models import (
     Image,
     Post,
     ImageComment,
-    PostComment
+    PostComment,
+    Album
 )
 
 
@@ -33,7 +34,19 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
+class AlbumSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Album
+        fields = [
+            'id',
+            'created',
+            'name',
+        ]
+
+
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    album = AlbumSerializer(many=False)
 
     class Meta:
         model = Image
@@ -47,7 +60,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             'likes',
             'type',
             'path',
-            'uniqueId'
+            'uniqueId',
+            'album'
         ]
 
 

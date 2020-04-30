@@ -145,6 +145,10 @@ class Album(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_all_albums():
+        return Album.objects.filter().order_by('id').all()
+
 
 class Image(models.Model):
     created = models.DateTimeField(default=django.utils.timezone.now)
@@ -213,16 +217,23 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_all_photo_gallery():
-        return Image.objects.filter(postImage=False).order_by('-id').all()
+    def get_all_photo_gallery(album_id):
+        gallery = Image.objects.filter(postImage=False)
+        if album_id > 0:
+            gallery = gallery.filter(album_id=album_id)
+        gallery = gallery.order_by('-id').all()
+        return gallery
 
     @staticmethod
     def get_image_by_unique_id(id):
         return Image.objects.filter(uniqueId=id, postImage=False).first()
 
     @staticmethod
-    def get_next_image(image_id):
-        images = Image.objects.filter(postImage=False).order_by('id').all()
+    def get_next_image(image_id, album_id):
+        images = Image.objects.filter(postImage=False)
+        if album_id:
+            images = images.filter(album_id=album_id)
+        images = images.order_by('id').all()
         ids = []
         current_index = -1
         index = -1
@@ -235,8 +246,11 @@ class Image(models.Model):
         return Image.objects.filter(id=ids[index], postImage=False).first()
 
     @staticmethod
-    def get_previous_image(image_id):
-        images = Image.objects.filter(postImage=False).order_by('id').all()
+    def get_previous_image(image_id, album_id):
+        images = Image.objects.filter(postImage=False)
+        if album_id:
+            images = images.filter(album_id=album_id)
+        images = images.order_by('id').all()
         ids = []
         current_index = -1
         index = -1
