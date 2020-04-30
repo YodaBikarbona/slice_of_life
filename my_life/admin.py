@@ -5,7 +5,8 @@ from .models import (
     Post,
     Image,
     ImageComment,
-    PostComment
+    PostComment,
+    Album
 )
 
 # Register your models here.
@@ -14,5 +15,6 @@ admin.register(Role)(admin.ModelAdmin)
 admin.register(User)(admin.ModelAdmin)
 admin.register(Post)(admin.ModelAdmin)
 admin.register(PostComment)(admin.ModelAdmin)
+admin.register(Album)(admin.ModelAdmin)
 admin.register(Image)(admin.ModelAdmin)
 admin.register(ImageComment)(admin.ModelAdmin)
