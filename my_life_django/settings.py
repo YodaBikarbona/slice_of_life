@@ -27,7 +27,7 @@ SECRET_KEY = 'nhf4ibn7m6%j!iw6+lmm!l#(rsn1_$=gyjh10^elge520(gr3q'
 DEBUG = False
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'slice-of-life-yodabikarbona.herokuapp.com']
 
 
 # Application definition
