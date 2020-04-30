@@ -135,6 +135,14 @@ class User(models.Model):
         return signed
 
 
+class Album(models.Model):
+    created = models.DateTimeField(default=django.utils.timezone.now)
+    name = models.CharField(
+        max_length=126,
+        unique=True
+    )
+
+
 class Image(models.Model):
     created = models.DateTimeField(default=django.utils.timezone.now)
     # image = models.ImageField('Uploaded image')
@@ -177,6 +185,15 @@ class Image(models.Model):
         null=True,
         blank=True,
         max_length=256
+    )
+
+    # Relationships
+
+    album = models.ForeignKey(
+        Album,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
 
     def __str__(self):
