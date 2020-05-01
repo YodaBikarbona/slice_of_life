@@ -70,8 +70,15 @@ def login(request):
 
 @api_view(['GET'])
 def get_gallery(request, album_id):
-    images = Image.get_all_photo_gallery(album_id=album_id)
+    query_string = request.GET
+    limit = query_string['limit'] if 'limit' in query_string else None
+    offset = query_string['offset'] if 'offset' in query_string else None
+    limit, offset = check_valid_limit_and_offset(limit=limit, offset=offset)
+    images = Image.get_all_photo_gallery(album_id=album_id, offset=offset, limit=limit)
     images = ImageSerializer(many=True, instance=images).data
+    images_number = Image.count_images(album_id=album_id)
+    for image in images:
+        image['images_number'] = images_number
     return HttpResponse(
         json.dumps(
             {

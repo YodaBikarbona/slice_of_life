@@ -217,12 +217,23 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_all_photo_gallery(album_id):
+    def get_all_photo_gallery(album_id, offset, limit):
         gallery = Image.objects.filter(postImage=False)
         if album_id > 0:
             gallery = gallery.filter(album_id=album_id)
         gallery = gallery.order_by('-id').all()
+        if offset and limit and limit > offset:
+            gallery = gallery[offset*limit:(offset*limit)+limit]
+        elif not offset and limit and limit > offset:
+            gallery = gallery[:offset+limit]
         return gallery
+
+    @staticmethod
+    def count_images(album_id):
+        images_number = Image.objects.filter(postImage=False)
+        if album_id > 0:
+            images_number = images_number.filter(album_id=album_id)
+        return images_number.count()
 
     @staticmethod
     def get_image_by_unique_id(id):
