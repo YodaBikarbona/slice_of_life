@@ -222,9 +222,9 @@ class Image(models.Model):
         if album_id > 0:
             gallery = gallery.filter(album_id=album_id)
         gallery = gallery.order_by('-id').all()
-        if offset and limit and limit > offset:
+        if offset and limit:
             gallery = gallery[offset*limit:(offset*limit)+limit]
-        elif not offset and limit and limit > offset:
+        elif not offset and limit:
             gallery = gallery[:offset+limit]
         return gallery
 
